@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile_user.username }}'s Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 text-center">
+        {% if profile_user.avatar %}
+            <img src="{{ profile_user.avatar.url }}" alt="{{ profile_user.username }}" 
+                 class="rounded-circle mb-3" width="150" height="150">
+        {% else %}
+            <div class="avatar-placeholder rounded-circle mb-3 d-flex align-items-center justify-content-center" 
+                 style="width:150px; height:150px; background-color:#eee;">
+                <span class="text-muted">{{ profile_user.username|first|upper }}</span>
+            </div>
+        {% endif %}
+        
+        <h2>{{ profile_user.username }}</h2>
+        {% if profile_user.bio %}
+            <p class="text-muted">{{ profile_user.bio }}</p>
+        {% endif %}
+        
+        {% if user == profile_user %}
+            <a href="{% url 'profile_edit' pk=user.pk %}" class="btn btn-outline-secondary">
+                Edit Profile
+            </a>
+        {% endif %}
+    </div>
+    
+    <!-- Rest of your template remains the same -->
+</div>
+{% endblock %}

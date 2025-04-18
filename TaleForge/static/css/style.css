@@ -1,0 +1,53 @@
+/* Base styles */
+body {
+    padding-top: 20px;
+    background-color: #f8f9fa;
+}
+
+/* Chapter content styling */
+.chapter-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Story card hover effect */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,.1);
+    transition: all 0.3s ease;
+}
+
+/* Avatar styling */
+.rounded-circle {
+    object-fit: cover;
+}
+
+/* Vote buttons */
+.btn-outline-success.active {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-outline-danger.active {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Breadcrumb styling */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .chapter-content {
+        font-size: 1rem;
+    }
+}
+.avatar-placeholder {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #666;
+    margin: 0 auto;
+}

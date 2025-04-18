@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}
+TaleForge - Collaborative Storytelling
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .story-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+  }
+
+  .story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .story-card img {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    object-fit: cover;  /* Ensures the image covers the area without distortion */
+    height: 200px;      /* Fixed height for images */
+    width: 100%;        /* Ensures the image takes up the full width of the card */
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .card-footer {
+    font-size: 0.85rem;
+    background-color: #f8f9fa;
+    border-top: none;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .btn-outline-primary {
+    border-radius: 20px;
+  }
+
+  .fade-in {
+    animation: fadeInUp 0.7s ease;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-text {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .hero-text h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+
+  .hero-text p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+</style>
+
+<!-- Main Content -->
+<div class="container mt-4 fade-in">
+
+  <!-- Top Intro Section -->
+  <div class="hero-text">
+    <h1>Welcome to TaleForge</h1>
+    <p class="lead">Collaborate to create amazing branching stories!</p>
+
+  </div>
+
+  <!-- Story Cards -->
+  <div class="row">
+    {% for story in stories %}
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card h-100 story-card">
+        {% if story.cover_image %}
+        <img src="{{ story.cover_image.url }}" class="card-img-top" alt="{{ story.title }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ story.title }}</h5>
+          <p class="card-text mt-2">{{ story.summary|truncatewords:25 }}</p>
+          <a href="{% url 'story_detail' pk=story.pk %}" class="btn btn-outline-primary btn-sm mt-2">Read Story</a>
+        </div>
+        <div class="card-footer text-muted">
+          By <a href="{% url 'profile' pk=story.author.pk %}">{{ story.author.username }}</a><br>
+          {{ story.created_at|date:"M d, Y" }}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col">
+      <p>No stories found. Be the first to <a href="{% url 'story_create' %}">create one</a>!</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Bottom New Story Button -->
+  <div class="text-center my-4">
+    <a href="{% url 'story_create' %}" class="btn btn-lg btn-primary">Start a New Story</a>
+  </div>
+
+  {% include 'includes/pagination.html' %}
+</div>
+
+{% endblock %}

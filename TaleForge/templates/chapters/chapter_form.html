@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Chapter to {{ story.title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">
+            Add Chapter to "{{ story.title }}"
+            {% if parent %}
+                <small class="text-muted">Branching from "{{ parent.title }}"</small>
+            {% endif %}
+        </h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Submit Chapter</button>
+                <a href="{% url 'story_detail' pk=story.pk %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

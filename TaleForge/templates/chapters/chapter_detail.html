@@ -1,0 +1,128 @@
+{% extends 'base.html' %} {% block title %}{{ chapter.title }} - {{
+chapter.story.title }}{% endblock %} {% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'story_detail' pk=chapter.story.pk %}"
+            >{{ chapter.story.title }}</a
+          >
+        </li>
+        {% for ancestor in chapter.get_ancestors %}
+        <li class="breadcrumb-item">
+          <a href="{% url 'chapter_detail' pk=ancestor.pk %}"
+            >{{ ancestor.title }}</a
+          >
+        </li>
+        {% endfor %}
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ chapter.title }}
+        </li>
+      </ol>
+    </nav>
+
+    <h1>{{ chapter.title }}</h1>
+    <p class="text-muted">
+      By
+      <a href="{% url 'profile' pk=chapter.author.pk %}"
+        >{{ chapter.author.username }}</a
+      >
+      on {{ chapter.created_at|date:"M d, Y" }}
+    </p>
+
+    <div class="chapter-content mb-4">{{ chapter.content|linebreaks }}</div>
+
+    <div class="d-flex justify-content-between mb-3">
+      <div>
+        <span
+          class="badge bg-{% if chapter.status == 'APP' %}success{% elif chapter.status == 'REJ' %}danger{% else %}warning{% endif %}"
+        >
+          {{ chapter.get_status_display }}
+        </span>
+        <span class="ms-2 badge bg-secondary">{{ chapter.votes }} votes</span>
+      </div>
+
+      {% if user.is_authenticated and chapter.status == 'PEN' %}
+      <div class="d-flex gap-2">
+        <form method="post" action="{% url 'chapter_vote' pk=chapter.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="vote_type" value="up" />
+          <button type="submit" class="btn btn-sm btn-outline-success">
+            <i class="bi bi-hand-thumbs-up"></i> Upvote
+          </button>
+        </form>
+
+        <form method="post" action="{% url 'chapter_vote' pk=chapter.pk %}">
+          {% csrf_token %}
+          <input type="hidden" name="vote_type" value="down" />
+          <button type="submit" class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-hand-thumbs-down"></i> Downvote
+          </button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <a
+      href="{% url 'chapter_create_with_parent' story_pk=chapter.story.pk parent_pk=chapter.pk %}"
+      class="btn btn-primary mb-4"
+    >
+      Continue This Path
+    </a>
+    {% endif %} {% if branches %}
+    <h3>Possible Continuations</h3>
+    <div class="list-group">
+      {% for branch in branches %}
+      <a
+        href="{% url 'chapter_detail' pk=branch.pk %}"
+        class="list-group-item list-group-item-action"
+      >
+        {{ branch.title }}
+        <span class="badge bg-secondary float-end"
+          >{{ branch.votes }} votes</span
+        >
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-header">Story Navigation</div>
+      <div class="card-body">
+        <a
+          href="{% url 'story_detail' pk=chapter.story.pk %}"
+          class="btn btn-outline-primary w-100 mb-2"
+        >
+          Back to Story
+        </a>
+        {% if chapter.parent %}
+        <a
+          href="{% url 'chapter_detail' pk=chapter.parent.pk %}"
+          class="btn btn-outline-secondary w-100"
+        >
+          Previous Chapter
+        </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Story Info</div>
+      <div class="card-body">
+        <h5>{{ chapter.story.title }}</h5>
+        <p>{{ chapter.story.summary|truncatewords:20 }}</p>
+        <a
+          href="{% url 'story_detail' pk=chapter.story.pk %}"
+          class="btn btn-sm btn-outline-primary"
+        >
+          View Full Story
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+:root {
+    --bs-primary: #6f42c1;    /* Purple */
+    --bs-secondary: #6610f2;  /* Darker purple */
+    --bs-success: #198754;
+    --bs-info: #0dcaf0;
+    --bs-warning: #ffc107;
+    --bs-danger: #dc3545;
+    --bs-light: #f8f9fa;
+    --bs-dark: #212529;
+    
+    /* Custom variables */
+    --gradient-primary: linear-gradient(45deg, #6f42c1, #6610f2);
+    --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+[data-bs-theme="dark"] {
+    --bs-body-bg: #1a1a1a;
+    --bs-body-color: #ffffff;
+    --bs-secondary: #4a148c;
+    --bs-primary: #5a189a;
+}
+
+/* Custom components */
+.btn-primary {
+    background-image: var(--gradient-primary);
+    border: none;
+    transition: transform 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.navbar {
+    box-shadow: var(--box-shadow);
+}
+
+.card {
+    border: none;
+    box-shadow: var(--box-shadow);
+    background: var(--bs-body-bg);
+}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if object %}Edit {{ object.title }}{% else %}New Story{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">
+            {% if object %}Edit Story{% else %}Create New Story{% endif %}
+        </h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                    {% if object %}Update{% else %}Create{% endif %}
+                </button>
+                <a href="{% if object %}{% url 'story_detail' pk=object.pk %}{% else %}{% url 'home' %}{% endif %}" 
+                   class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
